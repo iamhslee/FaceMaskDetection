@@ -36,12 +36,15 @@ args = vars(ap.parse_args())
 
 # Initialize the initial learning rate, number of epochs to train and batch size
 INIT_LR = 1e-4
-EPOCHS = 100
+EPOCHS = 10
 BS = 21
 
 # FMD info
-print("Face Mask Detection - train.py")
-print("2020. 09. 01. by Hyunseo Lee")
+print("\n==============================")
+print("\nFace Mask Detection - train.py")
+print("\n2020. 09. 01. by Hyunseo Lee")
+print("\n==============================\n")
+
 
 # Grab the list of images from dataset path, then initialize the list of data and class images
 print("[FMD] [Info] Loading images...")
