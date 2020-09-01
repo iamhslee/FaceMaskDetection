@@ -47,7 +47,7 @@ print("\n==============================\n")
 
 
 # Grab the list of images from dataset path, then initialize the list of data and class images
-print("[FMD] [Info] Loading images...")
+print("[FMD] [INFO] Loading images...")
 imagePath = list(paths.list_images(args["dataset"]))
 data = []
 labels = []
@@ -100,11 +100,11 @@ opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # Train the head of the network
-print("[INFO] Training head...")
+print("[FMD] [INFO] Training head...")
 H = model.fit(aug.flow(trainX, trainY, batch_size=BS), steps_per_epoch=len(trainX) // BS, validation_data=(testX, testY), validation_steps=len(testX) // BS, epochs=EPOCHS)
 
 # Make predictions on the testing set
-print("[INFO] Evaluating network...")
+print("[FMD] [INFO] Evaluating network...")
 predIdxs = model.predict(testX, batch_size=BS)
 
 # For each image in the testing set we need to find the index of the label with corresponding largest predicted probability
@@ -114,7 +114,7 @@ predIdxs = np.argmax(predIdxs, axis=1)
 print(classification_report(testY.argmax(axis=1), predIdxs, target_names=lb.classes_))
 
 # Serialize the model to disk
-print("[INFO] Saving Face Mask Detector model...")
+print("[FMD] [INFO] Saving Face Mask Detector model...")
 model.save(args["model"], save_format="h5")
 
 # Plot the training loss and accuracy
