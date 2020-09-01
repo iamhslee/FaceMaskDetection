@@ -130,3 +130,9 @@ plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
 plt.savefig(args["plot"])
+
+# Training done
+print("\n==============================")
+print("\nFace Mask Detection - train.py")
+print("\nTraining complete.")
+print("\n==============================")
