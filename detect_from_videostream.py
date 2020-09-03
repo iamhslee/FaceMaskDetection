@@ -125,10 +125,12 @@ while True:
 		# Count faces number & Increse number when people wear mask or not
 		if label == "Mask":
 			withMaskNum += 1
-		elif label == "No Mask":
+			facesNum += 1
+		
+		if label == "No Mask":
 			withoutMaskNum += 1
-		facesNum += 1
-
+			facesNum += 1
+		
 		# Include the probability in the label
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
 

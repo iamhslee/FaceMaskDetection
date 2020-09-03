@@ -75,9 +75,11 @@ for i in range(0, detections.shape[2]):
 		# Count faces number & Increse number when people wear mask or not
 		if label == "Mask":
 			withMaskNum += 1
-		elif label == "No Mask":
+			facesNum += 1
+
+		if label == "No Mask":
 			withoutMaskNum += 1
-		facesNum += 1
+			facesNum += 1
 
 		color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
