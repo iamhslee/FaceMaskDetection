@@ -50,6 +50,11 @@ print("[FMD] [INFO] Computing face detections...")
 net.setInput(blob)
 detections = net.forward()
 
+# Variables about faces number & The presense or absence about wearing mask
+facesNum = int(0)
+withMaskNum = int(0)
+withoutMaskNum = int(0)
+
 # Loop over the detections
 for i in range(0, detections.shape[2]):
 	confidence = detections[0, 0, i, 2]
@@ -66,17 +71,28 @@ for i in range(0, detections.shape[2]):
 		face = np.expand_dims(face, axis=0)
 		(mask, withoutMask) = model.predict(face)[0]
 		label = "Mask" if mask > withoutMask else "No Mask"
+
+		# Count faces number & Increse number when people wear mask or not
+		if label == "Mask":
+			withMaskNum += 1
+		elif label == "No Mask":
+			withoutMaskNum += 1
+		facesNum += 1
+
 		color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
 		cv2.putText(image, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
 		cv2.rectangle(image, (startX, startY), (endX, endY), color, 2)
+		cv2.putText(image, "Number of Faces : " + str(facesNum), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+		cv2.putText(image, "Faces with Mask : " + str(withMaskNum), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+		cv2.putText(image, "Faces without Mask : " + str(withoutMaskNum), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
 # Help info to quit cv2 image window
 print("\n=======================================")
 print("\nTo quit cv2 image window, Press key [0]")
 print("\n=======================================")
 
-cv2.imshow("Output", image)
+cv2.imshow("Face Mask Detection - Image", image)
 cv2.waitKey(0)
 
 # Detection done

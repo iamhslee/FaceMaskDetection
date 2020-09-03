@@ -36,8 +36,8 @@ args = vars(ap.parse_args())
 
 # Initialize the initial learning rate, number of epochs to train and batch size
 INIT_LR = 1e-4
-EPOCHS = 1000
-BS = 21
+EPOCHS = 100
+BS = 32
 
 # FMD info
 print("\n==============================")

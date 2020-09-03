@@ -98,6 +98,11 @@ print("\n==============================================")
 print("\nTo quit cv2 video stream window, Press key [0]")
 print("\n==============================================")
 
+# Variables about faces number & The presense or absence about wearing mask
+facesNum = int(0)
+withMaskNum = int(0)
+withoutMaskNum = int(0)
+
 # Loop over the frames from the video stream
 while True:
 	# Grab the frame from the threaded video stream and resize it to have a maximum width of 400 pixels
@@ -117,13 +122,27 @@ while True:
 		label = "Mask" if mask > withoutMask else "No Mask"
 		color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
 
+		# Count faces number & Increse number when people wear mask or not
+		if label == "Mask":
+			withMaskNum += 1
+		elif label == "No Mask":
+			withoutMaskNum += 1
+		facesNum += 1
+
 		# Include the probability in the label
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
 
 		# Display the label and bounding box rectangle on the output frame
-		cv2.putText(frame, label, (startX, startY - 10),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
+		cv2.putText(frame, label, (startX, startY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
 		cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
+		cv2.putText(frame, "Number of Faces : " + str(facesNum), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+		cv2.putText(frame, "Faces with Mask : " + str(withMaskNum), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+		cv2.putText(frame, "Faces without Mask : " + str(withoutMaskNum), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+		# Reset variables after print text one time
+		facesNum = int(0)
+		withMaskNum = int(0)
+		withoutMaskNum = int(0)
 
 	# Show the output frame
 	cv2.imshow("Face Mask Detection - VideoSteam", frame)
