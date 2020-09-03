@@ -36,7 +36,7 @@ args = vars(ap.parse_args())
 
 # Initialize the initial learning rate, number of epochs to train and batch size
 INIT_LR = 1e-4
-EPOCHS = 100
+EPOCHS = 10000
 BS = 32
 
 # FMD info
@@ -74,7 +74,7 @@ labels = to_categorical(labels)
 (trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.20, stratify=labels, random_state=42)
 
 # Construct the training image generator for data augmentation
-aug = ImageDataGenerator(rotation_range=20, zoom_range=0.15, width_shift_range=0.2, height_shift_range=0.2, shear_range=0.15, horizontal_flip=True, fill_mode="nearest")
+aug = ImageDataGenerator(brightness_range=0.3, rotation_range=30, zoom_range=0.3, width_shift_range=0.3, height_shift_range=0.3, shear_range=0.3, horizontal_flip=True, fill_mode="nearest")
 
 # Load the MobileNetV2 network, ensuring the head FC layer sets are left off
 baseModel = MobileNetV2(weights="imagenet", include_top=False, input_tensor=Input(shape=(224, 224, 3)))
