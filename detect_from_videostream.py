@@ -15,6 +15,7 @@ import imutils
 import time
 import cv2
 import cvlib as cv
+import csv
 import os
 
 # FMD info
@@ -23,42 +24,14 @@ print("\nFace Mask Detection - detect_from_videostream.py")
 print("\n2020. 09. 01. by Hyunseo Lee")
 print("\n================================================\n")
 
-def detect_and_predict_mask(frame, model):
-
-	# Initialize our list of faces, their corresponding locations, and the list of predictions from our face mask network
-	faces = []
-	locs = []
-	preds = []
-
-	faces, confidence = cv.detect_face(frame)
-
-	# Loop over the detections
-	for face in faces:
-		(startX, startY) = face[0], face[1]
-		(endX, endY) = face[2], face[3]
-		face = frame[startY:endY, startX:endX]
-		face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
-		face = cv2.resize(face, (224, 224))
-		face = img_to_array(face)
-		face = preprocess_input(face)
-
-		# Add the face and bounding boxes to their respective lists
-		faces.append(face)
-		locs.append((startX, startY, endX, endY))
-
-	# Only make a predictions if at least one face was detected
-	if len(faces) > 0:
-		# For faster inference we'll make batch predictions on all faces at the same time rather than one-by-one predictions in the above `for` loop
-		faces = np.array(faces, dtype="float32")
-		preds = model.predict(face, batch_size=32)[0]
-
-	# Return a 2-tuple of the face locations and their corresponding locations
-	return (locs, preds)
-
 # Argument Parser
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, default="face_mask_detection.model", help="Face Mask Detector Model Path")
 args = vars(ap.parse_args())
+
+# CSV file path
+videostreamCSV = open('./CSV/VideoStream/videostream.csv', 'w', encoding='utf-8')
+videostreamCSVwriter = csv.writer(videostreamCSV)
 
 # Load face mask detection model
 print("[FMD] [INFO] Loading face mask detector model...")
@@ -82,7 +55,7 @@ withoutMaskNum = int(0)
 while True:
 	# Grab the frame from the threaded video stream and resize it to have a maximum width of 400 pixels
 	frame = vs.read()
-	frame = imutils.resize(frame, width=720)
+	frame = imutils.resize(frame, width=480)
 
 	(h, w) = frame.shape[:2]
 
@@ -119,6 +92,7 @@ while True:
 		cv2.putText(frame, "Number of Faces : " + str(facesNum), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 		cv2.putText(frame, "Faces with Mask : " + str(withMaskNum), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 		cv2.putText(frame, "Faces without Mask : " + str(withoutMaskNum), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+		videostreamCSVwriter.writerow([facesNum, withMaskNum, withoutMaskNum])
 
 		# Reset variables after print text one time
 		facesNum = int(0)
@@ -136,6 +110,7 @@ while True:
 # Cleanup
 cv2.destroyAllWindows()
 vs.stop()
+videostreamCSV.close()
 
 # Detection done
 print("\n================================================")

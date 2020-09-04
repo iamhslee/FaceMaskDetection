@@ -12,6 +12,7 @@ import numpy as np
 import argparse
 import cv2
 import cvlib as cv
+import csv
 import os
 
 # Argument Parser
@@ -19,6 +20,10 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True, help="Image Path")
 ap.add_argument("-m", "--model", type=str, default="face_mask_detection.model", help="Face Mask Detector Model Path")
 args = vars(ap.parse_args())
+
+# CSV file path
+imageCSV = open('./CSV/Image/image.csv', 'w', encoding='utf-8')
+imageCSVwriter = csv.writer(imageCSV)
 
 # FMD info
 print("\n==========================================")
@@ -72,6 +77,7 @@ for face in faces:
 	cv2.putText(image, "Number of Faces : " + str(facesNum), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 	cv2.putText(image, "Faces with Mask : " + str(withMaskNum), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 	cv2.putText(image, "Faces without Mask : " + str(withoutMaskNum), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+	imageCSVwriter.writerow([facesNum, withMaskNum, withoutMaskNum])
 
 # Help info to quit cv2 image window
 print("\n=======================================")
@@ -80,6 +86,7 @@ print("\n=======================================")
 
 cv2.imshow("Face Mask Detection - Image", image)
 cv2.waitKey(0)
+imageCSV.close()
 
 # Detection done
 print("\n==========================================")
