@@ -18,6 +18,8 @@ import cvlib as cv
 import csv
 import os
 
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 # FMD info
 print("\n================================================")
 print("\nFace Mask Detection - detect_from_videostream.py")
