@@ -1,5 +1,5 @@
 # Face Mask Detection - detect_from_videostream.py
-# 2020. 09. 01. by Hyunseo Lee
+# 2021. 08. 15. by Hyunseo Lee
 
 # Usage
 # python detect_from_videostream.py
@@ -23,7 +23,6 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 # FMD info
 print("\n================================================")
 print("\nFace Mask Detection - detect_from_videostream.py")
-print("\n2020. 09. 01. by Hyunseo Lee")
 print("\n================================================\n")
 
 # Argument Parser
@@ -117,5 +116,4 @@ videostreamCSV.close()
 # Detection done
 print("\n================================================")
 print("\nFace Mask Detection - detect_from_videostream.py")
-print("\nDetection complete.")
 print("\n================================================")
